@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 64 64" role="img" aria-label="花谱 Flower Codex">
+  <rect x="2" y="2" width="60" height="60" fill="#F7F2E9" stroke="#A0432B" stroke-width="1.4"/>
+  <circle cx="32" cy="7.6" r="1.7" fill="none" stroke="#A0432B" stroke-width="0.9"/>
+  <g transform="translate(32 34) rotate(-6)">
+    <ellipse cx="0" cy="-12.5" rx="6.6" ry="12.5" fill="#A0432B"/>
+    <ellipse cx="0" cy="-12.5" rx="6.6" ry="12.5" fill="#C98B8B" transform="rotate(72)"/>
+    <ellipse cx="0" cy="-12.5" rx="6.6" ry="12.5" fill="#A0432B" transform="rotate(144)"/>
+    <ellipse cx="0" cy="-12.5" rx="6.6" ry="12.5" fill="#C98B8B" transform="rotate(216)"/>
+    <ellipse cx="0" cy="-12.5" rx="6.6" ry="12.5" fill="#C08A2E" transform="rotate(288)"/>
+    <circle r="4.4" fill="#C08A2E" stroke="#A0432B" stroke-width="0.7"/>
+  </g>
+  <path d="M32 46 C31.2 50 31.2 53 32 56" fill="none" stroke="#6E7A58" stroke-width="1.2" stroke-linecap="round"/>
+  <path d="M32 51 C28 48.8 24.8 49.8 22.8 53 C26.8 54.2 30 53.2 32 51Z" fill="#6E7A58"/>
+  <path d="M32 53 C36 50.8 39.2 51.8 41.2 55 C37.2 56.2 34 55.2 32 53Z" fill="#6E7A58"/>
+</svg>

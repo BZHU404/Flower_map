@@ -1,0 +1,262 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>花谱 · 这束花，该送什么？</title>
+  <meta name="description" content="花谱：写给写作者、画手与考据党的花与场合对照册。按场合反查、花期日历、花束配方；花语因文化而异，毒性仅供创作参考。">
+  <meta name="theme-color" content="#F7F2E9">
+  <meta property="og:title" content="花谱 · 这束花，该送什么？">
+  <meta property="og:description" content="给写故事的人、画画的人，和认真考据的人。100 种花，12 个月，6 组花束配方。">
+  <meta property="og:type" content="website">
+  <link rel="icon" href="logo.svg?v=20261106" type="image/svg+xml">
+  <script>
+    try { if (localStorage.getItem("huapu-theme") === "night") document.documentElement.dataset.theme = "night"; } catch (e) {}
+  </script>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <a class="skip-link" href="#index">跳到花谱索引</a>
+  <noscript><p class="noscript">花谱的搜索、筛选与详情需要 JavaScript。请开启后再使用。</p></noscript>
+
+  <header class="masthead" id="top">
+    <a class="brand" href="#top" aria-label="花谱首页">
+      <img class="brand-mark" src="logo.svg?v=20261106" alt="" width="36" height="36">
+      <span class="brand-text">
+        <span class="brand-cn">花谱</span>
+        <span class="brand-en">FLOWER CODEX</span>
+      </span>
+    </a>
+    <nav class="nav" aria-label="主导航">
+      <a href="#occasions">场合</a>
+      <a href="#calendar">花期</a>
+      <a href="#index">索引</a>
+      <a href="#bouquets">花束</a>
+      <a href="#about">说明</a>
+      <a href="flowers-list.html">花单 ↗</a>
+    </nav>
+    <div class="header-actions">
+      <button class="theme-btn" id="themeToggle" type="button" aria-label="切换夜晚模式" aria-pressed="false" title="切换夜晚模式">
+        <span class="theme-icon" aria-hidden="true">☾</span>
+        <span class="theme-label">夜</span>
+      </button>
+      <button class="basket-btn" id="basketBtn" type="button" aria-label="打开花篮">
+        <span class="basket-label">花篮</span>
+        <span class="basket-count" id="basketCount">0</span>
+      </button>
+      <button class="random-btn" id="randomBtn" type="button">
+        <span>随机一支</span>
+        <span aria-hidden="true">↗</span>
+      </button>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero" aria-labelledby="heroTitle">
+      <div class="hero-copy">
+        <p class="eyebrow"><span class="eyebrow-rule" aria-hidden="true"></span>写给写作者、画手与考据党</p>
+        <h1 id="heroTitle">这束花，<br><span>该送什么？</span></h1>
+        <p class="hero-lede">这里不只有花语。还有它适合出现的时刻、不该出现的场合，以及同一朵花在三种文化里不同的意思。</p>
+        <div class="hero-actions">
+          <button class="btn btn-solid" id="heroRandom" type="button">随机抽一支花</button>
+          <button class="btn btn-ghost" id="dailyBtn" type="button">今日花签 <span aria-hidden="true">✦</span></button>
+          <a class="btn btn-ghost" href="#occasions">按场合反查 <span aria-hidden="true">→</span></a>
+        </div>
+        <p class="hero-note">花语因文化而异；毒性仅供创作参考，不要据此食用或药用。</p>
+      </div>
+      <aside class="hero-aside" aria-label="花谱简介">
+        <div class="hero-emblem" aria-hidden="true">
+          <img src="logo.svg?v=20261106" alt="" width="132" height="132">
+          <span>FLOWER CODEX · 2026</span>
+        </div>
+        <div class="hero-stat">
+          <span class="hero-stat-no" id="statFlowers">100</span>
+          <span class="hero-stat-label">种花 · 12 个月 · 6 组配方</span>
+        </div>
+        <p class="hero-quote">“花语不是字典，<br>是一层层文化的注脚。”</p>
+        <div class="hero-months" aria-hidden="true">
+          <span>01</span><span>02</span><span>03</span><span>04</span><span>05</span><span>06</span>
+          <span>07</span><span>08</span><span>09</span><span>10</span><span>11</span><span>12</span>
+        </div>
+      </aside>
+    </section>
+
+    <section class="section occasion-section" id="occasions" aria-labelledby="occasionsTitle">
+      <header class="section-head">
+        <span class="sec-no" aria-hidden="true">01</span>
+        <div>
+          <h2 id="occasionsTitle">按场合反查</h2>
+          <p class="section-sub">先别问花语，先问：这束花要出现在什么时刻？选中一个场合，看看该送什么，也看看不该送什么。</p>
+        </div>
+      </header>
+      <div class="occasion-chips" id="occasionChips" role="group" aria-label="选择场合"></div>
+      <div class="occasion-panel" id="occasionPanel" aria-live="polite">
+        <p class="panel-placeholder">选一个场合。这里会给出三到五支花的组合、一句花卡文案，以及「为什么合适 / 不要送」的理由。</p>
+      </div>
+    </section>
+
+    <section class="section calendar-section" id="calendar" aria-labelledby="calendarTitle">
+      <header class="section-head">
+        <span class="sec-no" aria-hidden="true">02</span>
+        <div>
+          <h2 id="calendarTitle">花期日历</h2>
+          <p class="section-sub">十二个月，一条横带。点某个月，看看当季正在开的花；卡片上也有一条迷你花期条。</p>
+        </div>
+      </header>
+      <div class="calendar-wrap">
+        <div class="calendar-strip" id="calendarStrip" role="group" aria-label="按月份查看花期"></div>
+        <div class="season-head">
+          <h3 id="seasonTitle">当季花</h3>
+          <button class="text-btn" id="seasonAll" type="button">在索引中查看全部 <span aria-hidden="true">→</span></button>
+        </div>
+        <div class="season-preview" id="seasonPreview"></div>
+      </div>
+    </section>
+
+    <section class="section index-section" id="index" aria-labelledby="indexTitle">
+      <header class="section-head">
+        <span class="sec-no" aria-hidden="true">03</span>
+        <div>
+          <h2 id="indexTitle">花谱索引</h2>
+          <p class="section-sub">中文、英文、学名、别名、花语、文化注记、禁忌与搭配都能搜。筛花期、花色、场合、花香、毒性与花形，每页十五条。</p>
+        </div>
+      </header>
+
+      <div class="search-block">
+        <label class="search-label" for="searchInput">搜索花名 / 花语 / 文化 / 禁忌</label>
+        <div class="search-field">
+          <span class="search-icon" aria-hidden="true">⌕</span>
+          <input id="searchInput" type="search" autocomplete="off" spellcheck="false" placeholder="玫瑰 / 爱情 / 猫 / 白菊 / Rosa rugosa">
+          <kbd class="search-kbd" aria-hidden="true">/</kbd>
+          <button class="search-clear" id="searchClear" type="button" aria-label="清除搜索" hidden>×</button>
+        </div>
+        <div class="search-suggestions" id="searchSuggestions" aria-label="搜索建议">
+          <span>试试</span>
+          <button type="button" data-quick-search="爱情">爱情</button>
+          <button type="button" data-quick-search="猫">有猫</button>
+          <button type="button" data-quick-search="探病">探病</button>
+          <button type="button" data-quick-search="白菊">白菊</button>
+          <button type="button" data-quick-search="离别">离别</button>
+          <button type="button" data-quick-search="压花">压花</button>
+        </div>
+      </div>
+
+      <div class="filter-bar" id="filterBar">
+        <div class="filter-group">
+          <span class="filter-label">花期</span>
+          <select id="monthFilter" aria-label="按花期月份筛选">
+            <option value="">全部月份</option>
+          </select>
+        </div>
+        <div class="filter-group filter-colors">
+          <span class="filter-label">花色</span>
+          <div class="color-filters" id="colorFilters" role="group" aria-label="按花色筛选"></div>
+        </div>
+        <div class="filter-group">
+          <span class="filter-label">场合</span>
+          <select id="occasionFilter" aria-label="按场合筛选">
+            <option value="">全部场合</option>
+          </select>
+        </div>
+        <div class="filter-group">
+          <span class="filter-label">花香</span>
+          <select id="scentFilter" aria-label="按花香筛选">
+            <option value="">全部</option>
+            <option value="无">无</option>
+            <option value="淡">淡</option>
+            <option value="浓">浓</option>
+          </select>
+        </div>
+        <div class="filter-group">
+          <span class="filter-label">毒性</span>
+          <select id="riskFilter" aria-label="按毒性风险筛选">
+            <option value="">全部</option>
+            <option value="pets">对猫狗有风险</option>
+            <option value="children">对儿童有风险</option>
+            <option value="low">风险较低</option>
+          </select>
+        </div>
+        <div class="filter-group">
+          <span class="filter-label">花形</span>
+          <select id="shapeFilter" aria-label="按花形筛选">
+            <option value="">全部</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="active-filters" id="activeFilters" aria-live="polite"></div>
+
+      <div class="result-bar">
+        <p class="result-count" id="resultCount">—</p>
+        <button class="text-btn" id="resetFilters" type="button">清除全部筛选</button>
+      </div>
+
+      <div class="flower-grid" id="flowerGrid"></div>
+      <nav class="pagination" id="pagination" aria-label="花谱分页"></nav>
+    </section>
+
+    <section class="section bouquet-section" id="bouquets" aria-labelledby="bouquetsTitle">
+      <header class="section-head">
+        <span class="sec-no" aria-hidden="true">04</span>
+        <div>
+          <h2 id="bouquetsTitle">花束配方</h2>
+          <p class="section-sub">六组可以直接交给花店的组合。每组装在一条花卡文案里，可打印成 A5 花卡。</p>
+        </div>
+      </header>
+      <div class="bouquet-grid" id="bouquetGrid"></div>
+    </section>
+
+    <section class="section about-section" id="about" aria-labelledby="aboutTitle">
+      <header class="section-head">
+        <span class="sec-no" aria-hidden="true">05</span>
+        <div>
+          <h2 id="aboutTitle">怎么读这份花谱</h2>
+          <p class="section-sub">花语是文化的流变，不是植物的属性。下面几条，比任何一条花语都重要。</p>
+        </div>
+      </header>
+      <div class="about-grid">
+        <article class="about-note">
+          <h3>花语不是普世规则</h3>
+          <p>同一种花，中式、西式、日式可能给出完全不同的意思，甚至互相冲突。每条花都分列三种语境；遇到「花语说……」的句子，先问是谁的花语。</p>
+        </article>
+        <article class="about-note">
+          <h3>毒性不是装饰注脚</h3>
+          <p>有毒花会标注对猫狗、儿童与误食的风险。这些标注只用于创作与安全提醒，不构成兽医、医疗或食用建议。不要据此食用、药用，也不要让宠物啃咬花材。</p>
+        </article>
+        <article class="about-note">
+          <h3>花图是形态示意</h3>
+          <p>站内所有花图都是按花瓣数、花形与花色生成的 SVG 压花/花形示意，不是照片，也不能替代植物学鉴定。真实花材请以实物与专业图鉴为准。</p>
+        </article>
+        <article class="about-note">
+          <h3>只谈栽培花材</h3>
+          <p>本站不推荐受管制或保护植物，不提供野外采摘、食用或药用建议。请使用园艺栽培花材；在送花前，先确认对方的过敏、宠物与宗教/文化语境。</p>
+        </article>
+      </div>
+      <div class="about-meta">
+        <p><strong>数据说明</strong> · <span data-count-flowers>100</span> 条花、9 个场合、<span data-count-bouquets>6</span> 组花束配方。花语为民间流变与花艺常用说法的整理，不宣称唯一正确；学名与科属按常用园艺分类，部分存在分类学修订。</p>
+        <p><strong>制作</strong> · Simon Workshop™ · 2026</p>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="footer-left">
+      <p class="footer-brand"><img class="footer-mark" src="logo.svg?v=20261106" alt="" width="24" height="24"><span class="footer-brand-text">花谱 <span>FLOWER CODEX</span></span></p>
+      <p class="footer-line">这束花，该送什么？ <a class="footer-list-link" href="flowers-list.html">花单 ↗</a></p>
+    </div>
+    <div class="footer-right">
+      <p class="disclaimer">免责声明：花语与毒性仅供创作参考，不要据此食用或药用。花材请使用园艺栽培来源。</p>
+      <p class="credit">Simon Workshop™</p>
+    </div>
+  </footer>
+
+  <div id="drawerRoot"></div>
+  <div id="modalRoot"></div>
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+  <div id="printCard" class="print-card" aria-hidden="true"></div>
+
+  <script src="data/flowers.js"></script>
+  <script src="data/bouquets.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

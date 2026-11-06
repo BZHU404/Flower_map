@@ -1,0 +1,618 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>花单 · 花谱</title>
+  <meta name="description" content="花谱当前 100 条花的迭代清单：编号、ID、学名、科属、花期、花色、场合与毒性。">
+  <meta name="theme-color" content="#F7F2E9">
+  <link rel="icon" href="logo.svg?v=20261106" type="image/svg+xml">
+  <style>
+    :root {
+      --paper: #F7F2E9;
+      --paper-2: #FBF7F0;
+      --ink: #211C17;
+      --ink-soft: rgba(33, 28, 23, .66);
+      --ink-faint: rgba(33, 28, 23, .42);
+      --line: rgba(33, 28, 23, .18);
+      --line-strong: rgba(33, 28, 23, .42);
+      --rouge: #A0432B;
+      --rouge-deep: #7D2B1A;
+      --lotus: #C98B8B;
+      --sage: #5F6D4C;
+      --gold: #C08A2E;
+      --serif: "Songti SC", "Songti TC", "STSong", "Noto Serif SC", "Source Han Serif SC", "SimSun", serif;
+      --sans: -apple-system, BlinkMacSystemFont, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Noto Sans SC", sans-serif;
+    }
+    * { box-sizing: border-box; }
+    html { background: var(--paper); color: var(--ink); }
+    body {
+      margin: 0;
+      background: var(--paper);
+      font-family: var(--sans);
+      font-size: 13px;
+      line-height: 1.7;
+      letter-spacing: .01em;
+      overflow-x: hidden;
+    }
+    a { color: inherit; text-decoration: none; }
+    button, input, select { font: inherit; color: inherit; }
+    button { cursor: pointer; }
+    a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible {
+      outline: 2px solid var(--rouge);
+      outline-offset: 3px;
+    }
+    h1, h2, p { margin: 0; }
+
+    .top {
+      width: min(1280px, calc(100% - 64px));
+      margin: 0 auto;
+      min-height: 84px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 24px;
+      border-bottom: 1px solid var(--line);
+    }
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 11px;
+    }
+    .brand img { width: 34px; height: 34px; display: block; }
+    .brand-cn {
+      font-family: var(--serif);
+      font-size: 24px;
+      letter-spacing: .16em;
+      line-height: 1;
+    }
+    .brand small {
+      display: block;
+      margin-top: 4px;
+      font-size: 7px;
+      letter-spacing: .22em;
+      color: var(--ink-soft);
+    }
+    .top-actions {
+      display: flex;
+      align-items: center;
+      gap: 18px;
+      font-size: 10px;
+      letter-spacing: .08em;
+    }
+    .top-actions a {
+      padding-bottom: 2px;
+      border-bottom: 1px solid var(--line-strong);
+    }
+    .top-actions a:hover { color: var(--rouge); border-color: var(--rouge); }
+    .top-actions .csv { color: var(--rouge); border-color: var(--rouge); }
+
+    main {
+      width: min(1280px, calc(100% - 64px));
+      margin: 0 auto;
+      padding: 54px 0 46px;
+    }
+
+    .hero {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 30px;
+      align-items: end;
+      padding-bottom: 28px;
+      border-bottom: 1px solid var(--line);
+    }
+    .eyebrow {
+      font-size: 9px;
+      letter-spacing: .2em;
+      color: var(--rouge);
+    }
+    h1 {
+      margin-top: 8px;
+      font-family: var(--serif);
+      font-weight: 400;
+      font-size: clamp(38px, 5vw, 62px);
+      line-height: 1.08;
+      letter-spacing: .04em;
+    }
+    .hero p {
+      max-width: 660px;
+      margin-top: 12px;
+      color: var(--ink-soft);
+      font-size: 12px;
+      line-height: 1.9;
+    }
+    .hero-rule {
+      width: 38px;
+      height: 2px;
+      margin-top: 16px;
+      background: var(--rouge);
+    }
+    .hero-stat {
+      text-align: right;
+      padding-bottom: 4px;
+    }
+    .hero-stat b {
+      display: block;
+      font-family: var(--serif);
+      font-size: 54px;
+      font-weight: 400;
+      line-height: .85;
+    }
+    .hero-stat span {
+      display: block;
+      margin-top: 8px;
+      font-size: 9px;
+      letter-spacing: .12em;
+      color: var(--ink-soft);
+    }
+
+    .tools {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px 24px;
+      padding: 18px 0;
+      border-bottom: 1px solid var(--line);
+    }
+    .search-wrap {
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      min-width: 260px;
+      flex: 1;
+      max-width: 520px;
+      border-bottom: 1px solid var(--line-strong);
+      padding: 4px 0 7px;
+    }
+    .search-wrap span { color: var(--ink-faint); font-size: 18px; line-height: 1; }
+    .search-wrap input {
+      width: 100%;
+      border: 0;
+      outline: 0;
+      background: transparent;
+      font-size: 15px;
+      padding: 0;
+    }
+    .search-wrap input::placeholder { color: var(--ink-faint); }
+    .tools-right {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      font-size: 10px;
+      color: var(--ink-soft);
+    }
+    .tools-right select {
+      border: 0;
+      border-bottom: 1px solid var(--line);
+      background: transparent;
+      padding: 3px 18px 3px 0;
+      font-size: 11px;
+      appearance: none;
+      -webkit-appearance: none;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='8' height='5' viewBox='0 0 8 5'%3E%3Cpath d='M1 1l3 3 3-3' fill='none' stroke='%23211C17' stroke-width='1'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 1px center;
+    }
+    .count { white-space: nowrap; color: var(--ink-faint); letter-spacing: .06em; }
+
+    .scroll-hint {
+      display: none;
+      margin-top: 12px;
+      font-size: 9px;
+      color: var(--ink-faint);
+      letter-spacing: .04em;
+    }
+    .table-wrap {
+      margin-top: 16px;
+      border: 1px solid var(--line);
+      background: var(--paper-2);
+      overflow-x: auto;
+    }
+    table {
+      width: 100%;
+      min-width: 1120px;
+      border-collapse: collapse;
+      font-size: 11px;
+    }
+    thead th {
+      position: sticky;
+      top: 0;
+      z-index: 1;
+      padding: 10px 8px;
+      border-bottom: 1px solid var(--line-strong);
+      background: var(--paper-2);
+      text-align: left;
+      font-size: 8px;
+      font-weight: 500;
+      letter-spacing: .15em;
+      color: var(--ink-soft);
+      white-space: nowrap;
+    }
+    tbody td {
+      padding: 12px 8px;
+      border-bottom: 1px solid var(--line);
+      vertical-align: top;
+    }
+    tbody tr:last-child td { border-bottom: 0; }
+    tbody tr:hover { background: #FCF8F2; }
+    .no {
+      font-family: var(--serif);
+      font-size: 13px;
+      color: var(--rouge);
+      white-space: nowrap;
+    }
+    code {
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      font-size: 9px;
+      color: var(--ink-soft);
+      white-space: nowrap;
+    }
+    .name {
+      display: block;
+      font-family: var(--serif);
+      font-size: 17px;
+      line-height: 1.35;
+      letter-spacing: .03em;
+    }
+    .name:hover { color: var(--rouge); }
+    .en {
+      display: block;
+      margin-top: 1px;
+      font-size: 8px;
+      color: var(--ink-faint);
+      letter-spacing: .02em;
+    }
+    .aliases {
+      display: block;
+      margin-top: 2px;
+      font-size: 8px;
+      color: var(--ink-faint);
+      line-height: 1.5;
+    }
+    .latin { font-size: 9px; font-style: italic; line-height: 1.5; color: var(--ink-soft); }
+    .family { font-size: 9px; line-height: 1.6; color: var(--ink-soft); }
+    .bloom {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      white-space: nowrap;
+    }
+    .bloom-label { font-size: 9px; color: var(--ink-soft); }
+    .bloom-bar {
+      display: grid;
+      grid-template-columns: repeat(12, 1fr);
+      gap: 1px;
+      width: 52px;
+    }
+    .bloom-bar i { display: block; height: 4px; background: var(--line); }
+    .bloom-bar i.on { background: var(--rouge); }
+    .dots { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 7px; }
+    .dot {
+      display: inline-flex;
+      align-items: center;
+      gap: 3px;
+      white-space: nowrap;
+      font-size: 8px;
+      color: var(--ink-soft);
+    }
+    .dot i {
+      width: 8px;
+      height: 8px;
+      border: 1px solid rgba(33,28,23,.22);
+      border-radius: 50%;
+    }
+    .chips { display: flex; flex-wrap: wrap; gap: 3px; }
+    .chips span {
+      padding: 1px 4px;
+      border: 1px solid var(--line);
+      font-size: 8px;
+      line-height: 1.6;
+      color: var(--ink-soft);
+      white-space: nowrap;
+    }
+    .tox {
+      display: inline-block;
+      padding: 1px 5px;
+      border: 1px solid var(--line);
+      font-size: 9px;
+      white-space: nowrap;
+    }
+    .tox[data-level="高"] { border-color: rgba(160,67,43,.5); color: var(--rouge); }
+    .tox[data-level="中"] { border-color: rgba(192,138,46,.55); color: #8A651E; }
+    .tox[data-level="低"] { color: var(--sage); }
+    .risk { display: block; margin-top: 3px; font-size: 8px; line-height: 1.5; color: var(--ink-faint); }
+    .row-actions { display: flex; flex-direction: column; gap: 5px; align-items: flex-start; }
+    .row-actions a, .row-actions button {
+      padding: 0;
+      border: 0;
+      border-bottom: 1px solid var(--line);
+      background: transparent;
+      font-size: 9px;
+      color: var(--ink-soft);
+      line-height: 1.6;
+    }
+    .row-actions a:hover, .row-actions button:hover { color: var(--rouge); border-color: var(--rouge); }
+
+    .footnote {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      gap: 12px 28px;
+      margin-top: 18px;
+      font-size: 9px;
+      line-height: 1.8;
+      color: var(--ink-faint);
+    }
+    .footnote strong { color: var(--ink-soft); font-weight: 500; }
+
+    .toast {
+      position: fixed;
+      left: 50%;
+      bottom: 24px;
+      z-index: 10;
+      padding: 8px 14px;
+      background: var(--ink);
+      color: var(--paper);
+      font-size: 10px;
+      transform: translate(-50%, 10px);
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity .2s, transform .2s;
+    }
+    .toast.show { opacity: 1; transform: translate(-50%, 0); }
+
+    footer {
+      width: min(1280px, calc(100% - 64px));
+      margin: 0 auto;
+      padding: 22px 0 34px;
+      border-top: 1px solid var(--line);
+      display: flex;
+      justify-content: space-between;
+      gap: 20px;
+      font-size: 8px;
+      line-height: 1.8;
+      color: var(--ink-soft);
+    }
+    footer .credit { color: var(--ink); letter-spacing: .12em; text-align: right; }
+
+    @media (max-width: 760px) {
+      .top, main, footer { width: calc(100% - 32px); }
+      .top { min-height: 68px; }
+      .brand img { width: 30px; height: 30px; }
+      .brand-cn { font-size: 21px; }
+      .brand small { display: none; }
+      .top-actions { gap: 12px; font-size: 9px; }
+      .top-actions .back { display: none; }
+      main { padding-top: 36px; }
+      .hero { grid-template-columns: 1fr; gap: 18px; }
+      .hero-stat { text-align: left; display: flex; align-items: baseline; gap: 10px; }
+      .hero-stat b { font-size: 40px; }
+      .hero-stat span { margin-top: 0; }
+      .tools { display: block; }
+      .search-wrap { max-width: none; }
+      .tools-right { margin-top: 12px; justify-content: space-between; }
+      .scroll-hint { display: block; }
+      .table-wrap { margin-top: 8px; -webkit-overflow-scrolling: touch; }
+      footer { flex-direction: column; }
+      footer .credit { text-align: right; }
+    }
+
+    @media print {
+      @page { size: A4 landscape; margin: 8mm; }
+      html, body { background: #fff; }
+      .top-actions, .tools, .toast, footer .credit { display: none !important; }
+      .top, main, footer { width: 100%; }
+      main { padding: 0; }
+      .hero { padding-bottom: 12px; }
+      .table-wrap { border: 0; overflow: visible; }
+      table { min-width: 0; font-size: 8px; }
+      thead th { position: static; }
+      tbody td, thead th { padding: 5px 4px; }
+      .name { font-size: 12px; }
+      .row-actions { display: none; }
+      .table-wrap { background: #fff; }
+    }
+  </style>
+</head>
+<body>
+  <header class="top">
+    <a class="brand" href="index.html" aria-label="回到花谱">
+      <img src="logo.svg?v=20261106" alt="">
+      <span><span class="brand-cn">花谱</span><small>FLOWER CODEX</small></span>
+    </a>
+    <div class="top-actions">
+      <a class="back" href="index.html">← 回到花谱</a>
+      <a class="csv" href="flowers-list.csv" download>下载 CSV</a>
+      <button class="csv" id="printBtn" type="button" style="border:0;border-bottom:1px solid var(--rouge);background:transparent;padding:0 0 2px;color:var(--rouge);font-size:10px;">打印花单</button>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div>
+        <p class="eyebrow">FLOWER LIST / ITERATION SHEET</p>
+        <h1>当前花单</h1>
+        <p>这是花谱现在收录的全部花，按编号列出。点花名可直接回到站内详情；点「复制 ID」把数据键名复制走，方便改稿或补条目。</p>
+        <div class="hero-rule"></div>
+      </div>
+      <div class="hero-stat">
+        <b id="statTotal">—</b>
+        <span>条花 / 持续更新</span>
+      </div>
+    </section>
+
+    <section class="tools" aria-label="花单筛选">
+      <label class="search-wrap" for="listSearch">
+        <span aria-hidden="true">⌕</span>
+        <input id="listSearch" type="search" placeholder="搜索中文 / English / 学名 / ID / 别名" autocomplete="off" spellcheck="false">
+      </label>
+      <div class="tools-right">
+        <label for="listSort">排序
+          <select id="listSort">
+            <option value="no">编号</option>
+            <option value="name">中文名</option>
+            <option value="latin">学名</option>
+            <option value="tox">毒性</option>
+          </select>
+        </label>
+        <span class="count" id="listCount">—</span>
+      </div>
+    </section>
+
+    <p class="scroll-hint">← 左右滑动表格，查看全部字段 →</p>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th scope="col">#</th>
+            <th scope="col">ID</th>
+            <th scope="col">花名</th>
+            <th scope="col">学名</th>
+            <th scope="col">科属</th>
+            <th scope="col">花期</th>
+            <th scope="col">花色</th>
+            <th scope="col">场合</th>
+            <th scope="col">毒性</th>
+            <th scope="col">操作</th>
+          </tr>
+        </thead>
+        <tbody id="listBody"></tbody>
+      </table>
+    </div>
+
+    <div class="footnote">
+      <p><strong>迭代提示</strong> · 改 `data/flowers.js` 后刷新本页即可；CSV 是当前快照，需要重新导出。花色与毒性仅供创作参考。</p>
+      <p><strong>Simon Workshop™</strong></p>
+    </div>
+  </main>
+
+  <footer>
+    <p>花谱 · 这束花，该送什么？ 花语与毒性仅供创作参考，不要据此食用或药用。花图与花色为创作示意。</p>
+    <p class="credit">Simon Workshop™</p>
+  </footer>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+  <script src="data/flowers.js"></script>
+  <script>
+    (function () {
+      "use strict";
+      var FLOWERS = window.FLOWERS || [];
+      var state = { q: "", sort: "no" };
+      var body = document.getElementById("listBody");
+      var count = document.getElementById("listCount");
+      var total = document.getElementById("statTotal");
+      var search = document.getElementById("listSearch");
+      var sort = document.getElementById("listSort");
+      var toast = document.getElementById("toast");
+      var toastTimer = null;
+
+      function esc(v) {
+        return String(v == null ? "" : v).replace(/[&<>"']/g, function (m) {
+          return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[m];
+        });
+      }
+      function pad(n) { return String(n).padStart(2, "0"); }
+      function formatMonths(months) {
+        var list = (months || []).slice().sort(function (a, b) { return a - b; });
+        var groups = [], start = list[0], prev = list[0];
+        if (!list.length) return "—";
+        for (var i = 1; i < list.length; i++) {
+          if (list[i] === prev + 1) prev = list[i];
+          else { groups.push([start, prev]); start = prev = list[i]; }
+        }
+        groups.push([start, prev]);
+        return groups.map(function (g) {
+          return g[0] === g[1] ? g[0] : g[0] + "–" + g[1];
+        }).join(" / ") + " 月";
+      }
+      function bloomBar(months) {
+        var html = '<span class="bloom-bar" aria-hidden="true">';
+        for (var m = 1; m <= 12; m++) html += '<i class="' + (months.indexOf(m) > -1 ? "on" : "") + '"></i>';
+        return html + "</span>";
+      }
+      function riskText(f) {
+        var p = [];
+        if (f.toxicity.petsRisk) p.push("猫狗");
+        if (f.toxicity.childRisk) p.push("儿童");
+        return p.length ? "对" + p.join(" / ") + "有风险" : "风险较低";
+      }
+      function row(f) {
+        var dots = (f.colors || []).map(function (c) {
+          return '<span class="dot"><i style="background:' + esc(c.hex) + '"></i>' + esc(c.name) + "</span>";
+        }).join("");
+        var occ = (f.occasions || []).map(function (o) { return "<span>" + esc(o) + "</span>"; }).join("");
+        var aliases = (f.aliases || []).join(" · ");
+        return "<tr>" +
+          '<td class="no">' + pad(f.no) + "</td>" +
+          "<td><code>" + esc(f.id) + "</code></td>" +
+          '<td><a class="name" href="index.html#' + esc(f.id) + '">' + esc(f.name) + "</a>" +
+            '<span class="en">' + esc(f.en) + "</span>" +
+            '<span class="aliases">' + esc(aliases) + "</span></td>" +
+          '<td class="latin">' + esc(f.latin) + "</td>" +
+          '<td class="family">' + esc(f.family) + "</td>" +
+          '<td><span class="bloom"><span class="bloom-label">' + esc(formatMonths(f.bloom)) + "</span>" + bloomBar(f.bloom) + "</span></td>" +
+          '<td><div class="dots">' + dots + "</div></td>" +
+          '<td><div class="chips">' + occ + "</div></td>" +
+          '<td><span class="tox" data-level="' + esc(f.toxicity.level) + '">' + esc(f.toxicity.level) + "</span>" +
+            '<span class="risk">' + esc(riskText(f)) + "</span></td>" +
+          '<td><div class="row-actions"><a href="index.html#' + esc(f.id) + '">查看 →</a><button type="button" data-copy-id="' + esc(f.id) + '">复制 ID</button></div></td>' +
+        "</tr>";
+      }
+      function render() {
+        var q = state.q.toLowerCase().trim();
+        var list = FLOWERS.filter(function (f) {
+          if (!q) return true;
+          return [f.name, f.en, f.latin, f.id, f.family, (f.aliases || []).join(" ")]
+            .join(" ").toLowerCase().indexOf(q) > -1;
+        });
+        if (state.sort === "name") list.sort(function (a, b) { return a.name.localeCompare(b.name, "zh"); });
+        else if (state.sort === "latin") list.sort(function (a, b) { return a.latin.localeCompare(b.latin); });
+        else if (state.sort === "tox") {
+          var rank = { "高": 0, "中": 1, "低": 2 };
+          list.sort(function (a, b) { return rank[a.toxicity.level] - rank[b.toxicity.level] || a.no - b.no; });
+        } else {
+          list.sort(function (a, b) { return a.no - b.no; });
+        }
+        body.innerHTML = list.map(row).join("");
+        count.textContent = "显示 " + list.length + " / " + FLOWERS.length + " 条";
+      }
+      function copyText(text) {
+        function fallback() {
+          var ta = document.createElement("textarea");
+          ta.value = text;
+          ta.setAttribute("readonly", "");
+          ta.style.position = "fixed";
+          ta.style.opacity = "0";
+          document.body.appendChild(ta);
+          ta.select();
+          var ok = false;
+          try { ok = document.execCommand("copy"); } catch (e) { ok = false; }
+          document.body.removeChild(ta);
+          showToast(ok ? "已复制 " + text : "复制失败，请手动选择");
+        }
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+          navigator.clipboard.writeText(text).then(function () { showToast("已复制 " + text); }).catch(fallback);
+        } else fallback();
+      }
+      function showToast(msg) {
+        toast.textContent = msg;
+        toast.classList.add("show");
+        clearTimeout(toastTimer);
+        toastTimer = setTimeout(function () { toast.classList.remove("show"); }, 1800);
+      }
+
+      total.textContent = FLOWERS.length;
+      render();
+      search.addEventListener("input", function () { state.q = search.value; render(); });
+      sort.addEventListener("change", function () { state.sort = sort.value; render(); });
+      document.addEventListener("click", function (e) {
+        var btn = e.target.closest("[data-copy-id]");
+        if (btn) copyText(btn.getAttribute("data-copy-id"));
+      });
+      document.getElementById("printBtn").addEventListener("click", function () { window.print(); });
+    })();
+  </script>
+</body>
+</html>
